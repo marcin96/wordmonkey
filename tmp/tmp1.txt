@@ -1,0 +1,4 @@
+worte = ["machen","macht","rennen","rennt","gehen","geht","fangen","gefangen","machst"]
+worte = gruppiere(worte)
+for i in worte:
+    print(i)
