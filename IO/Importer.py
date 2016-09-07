@@ -67,8 +67,7 @@ def import_words(filename,startindex = 0,endWord = "#END"):
                         else:
                             try:
                                 port.write(str(line) +">" + str(ret[1])+"\n")
-                            except:
-                                None
+                            except:None
                 count+=1
     else:
         for i in report:

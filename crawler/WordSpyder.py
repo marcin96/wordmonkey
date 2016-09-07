@@ -100,6 +100,14 @@ def findNextNomen(liste,tabu):
                               "Lampe","Marshmallow","Nadel","Ohr","Pinsel","Qualle","Rase","Strase","Urne","Volk",
                               "Winter","Xylophon","yack","Zitrone"]).lower()
 
+def crwl_website(url):
+    '''
+    crawls a website.
+    '''
+    source = getWebsiteSource(url)
+    words = extractToWordList(source)
+    return words
+
 def missionControl(rootUrl):
     '''
     Endless loop that navigates from

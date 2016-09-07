@@ -202,6 +202,9 @@ def showHelp():
     '''
     shows the help message
     '''
+    f = open("Readme.md","r")
+    hep = f.read()
+    print(hep)
     print("For help please read the ReadMe.md file")
 
 def checkCanBeRun():
@@ -266,4 +269,4 @@ if __name__== "__main__":
     try:
         main(sys.argv)
     except KeyboardInterrupt:
-            print("<Interrupted>")
+            input("<Interrupted>")
