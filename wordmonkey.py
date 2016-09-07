@@ -17,6 +17,12 @@ from utils import ressource_manager
 import time
 import datetime
 
+def printOutput(out):
+    '''
+    prints the output
+    '''
+    for i in out:print(i)
+
 def gettimeMSG():
     '''
     Returns the current date and time
@@ -50,11 +56,18 @@ def doWortExtraction(args):
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     startindex = prefixManager.getDataFromPrefix("-stri",args)
     endword = prefixManager.getDataFromPrefix("-end",args)
+    #-
+    printout = prefixManager.doesPrefixExist("--prntOut",args)
+    #-
     if(startindex == None):startindex = 0
     if(endword==None):endword = "#END"
-    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,startindex = int(startindex),endWord =endword)))
+    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,startindex = int(startindex),endWord = endword)))
     if(outputfile == None):outputfile = "out.txt"
-    Exporter.export(words,outputfile)
+    if(printout):printOutput(words)
+    if(isinstance(words[0],list)):
+        Exporter.export(words,outputfile,sep =";")
+    else:
+        Exporter.export(words,outputfile)
     print("Took ",ressource_manager.stopTime()," s")
     
 
@@ -72,6 +85,9 @@ def doListCompare(args):
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     fus = prefixManager.doesPrefixExist("-f",args)
     diff = prefixManager.doesPrefixExist("-diff",args)
+    #-
+    printout = prefixManager.doesPrefixExist("--prntOut",args)
+    #-
     if(fus==True):
         wordlist = fusion.fusionListsTogether(inputdirectory)
         print("Found "+str(len(wordlist))+" unique words")
@@ -90,9 +106,17 @@ def doMinimalPairs(args):
     ressource_manager.startTime()
     inputfile = prefixManager.getDataFromPrefix("-i",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
+    #-
+    printout = prefixManager.doesPrefixExist("--prntOut",args)
+    #-
     if(inputfile==0):print("wrong inputfile");return
     words = Importer.import_words(inputfile)
-    mpairs = Mpair_extractor.extractMpairs(words)
+    mpairs = []
+    if(isinstance(words[0],list)):
+       mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = 1)
+    else:
+        mpairs = Mpair_extractor.extractMpairs(words)
+    if(printout):printOutput(mpairs)
     Exporter.export(mpairs,outputfile,sep=":")
     print("Took ",ressource_manager.stopTime()," s")
 
@@ -118,6 +142,9 @@ def doCrawl(args):
     wikipedia = prefixManager.doesPrefixExist("-wikipedia",args)
     count = prefixManager.getDataFromPrefix("-count",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
+    #-
+    printout = prefixManager.doesPrefixExist("--prntOut",args)
+    #-
     if(inputfile!=None):
         if(phonetic==True):
             print("[phonetic mode]")
@@ -142,7 +169,6 @@ def doCrawl(args):
         WordSpyder.missionControl("Null")
         print("Files -> /dist")
         #Crawl from wikipedia //standart mode
-        
     print("Took ",ressource_manager.stopTime()," s")
 
 def doGroupier(args):
@@ -157,7 +183,12 @@ def doGroupier(args):
     ressource_manager.startTime()
     inputfile = prefixManager.getDataFromPrefix("-i",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
-    Exporter.export(Grouppier.gruppiere(Importer.import_words(inputfile)),outputfile,sep=":")
+    #-
+    printout = prefixManager.doesPrefixExist("--prntOut",args)
+    #-
+    groups = Grouppier.gruppiere(Importer.import_words(inputfile))
+    if(printout):printOutput(groups)
+    Exporter.export(groups,outputfile,sep=":")
     print("Took ",ressource_manager.stopTime()," s")
     
 

@@ -15,7 +15,7 @@ def getGemeinsamkeiten(wordA,wordB):
     '''
     gemeinsam = 0
     nicht_gemeinsam = 0
-    wordB+=" "
+    wordB += " "
     for i in range(0,len(wordA)):
         if(wordA[i] == wordB[i]):
             gemeinsam+=1
@@ -24,7 +24,7 @@ def getGemeinsamkeiten(wordA,wordB):
             if(nicht_gemeinsam>1):return 0
     return gemeinsam
 
-def extractMpairs(wordList):
+def extractMpairs(wordList,is2Dim = False,index = 1):#Todo -- add also phonetic support
     '''
     Extracts Mpairs.
     '''
@@ -36,8 +36,13 @@ def extractMpairs(wordList):
         wordmpair=[]
         wordmpair.append(wordList[i])
         for c in range(i+1,len(wordList)):
-            if(abs((len(wordList[i])-len(wordList[c]))) < 2):
-                if(abs((getGemeinsamkeiten(wordList[i],wordList[c])-len(wordList[c]))) < 2):
+            wort1 = wordList[i]
+            wort2 = wordList[c]
+            if(is2Dim == True):
+                wort1 = wordList[i][index]
+                wort2 = wordList[c][index]
+            if(abs((len(wort1)-len(wort2))) < 2):
+                if(abs((getGemeinsamkeiten(wort1,wort2)-len(wort2))) < 2):
                     wordmpair.append(wordList[c])
         if(len(wordmpair)>1):
             mpairs.append(wordmpair)

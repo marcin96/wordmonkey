@@ -13,7 +13,20 @@ def makeUnique(wordlist):
     '''
     makes the wordlist unique.
     '''
-    return list(set(wordlist)) 
+    if(wordlist!=None and len(wordlist)>1):
+        if(isinstance(wordlist[0],list)):
+            #With 2 dimensions
+            ret = []
+            for index in range(0,len(wordlist)):
+                if(wordlist[index] not in wordlist[index+1:len(wordlist)]):
+                    ret.append(wordlist[index])
+            return ret
+                    
+        else:
+            #With 1 dimension
+            return list(set(wordlist))
+    else:
+        return ["Nothing"]
 
 def fusion(wordlist_one,wordlist_two):
     '''

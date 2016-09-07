@@ -42,8 +42,16 @@ def import_words(filename,startindex = 0,endWord = "#END"):
                         port.write("Found Phonetics")
                         word = line.split(";")[0]
                         phonetic = line.split(";")[1]
-                        ret = word_catcher.isGermanWord(str(word))
-                        if(ret[0]==True):words.append([word,phonetic])
+                        if("," in word):
+                            wordt = word.split(",")
+                            w = ""
+                            for i in wordt:
+                                if(word_catcher.isGermanWord(str(i.strip()))[0]==True):
+                                    w+=i
+                            words.append([w,phonetic])
+                        else:
+                            ret = word_catcher.isGermanWord(str(word))
+                            if(ret[0]==True):words.append([word,phonetic])
                     else:
                         #normal import
                         if("," in line):
@@ -56,7 +64,11 @@ def import_words(filename,startindex = 0,endWord = "#END"):
                         else:
                             ret = word_catcher.isGermanWord(str(line))
                         if(ret[0]==True):words.append(line)
-                        else:None#port.write(str(line) +">" + str(ret[1])+"\n")
+                        else:
+                            try:
+                                port.write(str(line) +">" + str(ret[1])+"\n")
+                            except:
+                                None
                 count+=1
     else:
         for i in report:
