@@ -68,6 +68,7 @@ def isallowedDifference(diff):
     for i in allowed:
         i = i.split(":")
     for d in diff:
+        None
         
     
 def isTheSame(wordlistOne,wordlistTwo):

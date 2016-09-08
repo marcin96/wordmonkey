@@ -19,7 +19,7 @@ def filterOutCorrectFiles(directory,extens=".txt",encoding="UTF-8"):
                 files.append(name)
     return files
 
-def import_words(filename,startindex = -1,endWord = "#END",phonetic = False):
+def import_words(filename,startindex = -1,endWord = "#END",sep=" "):
     '''
     Imports words from file
     First checks if file is in Order
@@ -32,17 +32,17 @@ def import_words(filename,startindex = -1,endWord = "#END",phonetic = False):
     port.write(filename)
     if(report[0]):
         count = 1
-        with open(filename,encoding="UTF-8") as file:
+        with open(filename,encoding="utf-8-sig") as file:
             for line in file:
                 if(count>startindex):
                     line = line.lower().strip()
                     if(line.lower() == endWord.lower()):break
-                    #if(phonetic == True):line[line.index(" ")]=";"
-                    if(";" in line):
+                    if(sep in line):
                         #Also has phonetic
                         port.write("Found Phonetics")
-                        word = line.split(";")[0]
-                        phonetic = line.split(";")[1]
+                        #   --  Should be substring --
+                        word = line[0:line.index(sep)]
+                        phonetic = line[line.index(sep):len(line)]
                         if("," in word):
                             wordt = word.split(",")
                             w = ""
@@ -64,11 +64,11 @@ def import_words(filename,startindex = -1,endWord = "#END",phonetic = False):
                             words.append(wt[:-1])
                         else:
                             ret = word_catcher.isGermanWord(str(line))
-                        if(ret[0]==True):words.append(line)
-                        else:
-                            try:
-                                port.write(str(line) +">" + str(ret[1])+"\n")
-                            except:None
+                            if(ret[0]==True):words.append(line)
+                            else:
+                                try:
+                                    port.write(str(line) +">" + str(ret[1])+"\n")
+                                except:None
                 count+=1
     else:
         for i in report:

@@ -13,18 +13,21 @@ def makeUnique(wordlist):
     '''
     makes the wordlist unique.
     '''
+    print("Making Wordlist unique")
     if(wordlist!=None and len(wordlist)>1):
         if(isinstance(wordlist[0],list)):
             #With 2 dimensions
             ret = []
             for index in range(0,len(wordlist)):
-                if(wordlist[index] not in wordlist[index+1:len(wordlist)]):
+                progressbar.printProgress(index,len(wordlist))
+                if(wordlist[index] not in ret):
                     ret.append(wordlist[index])
             return ret
                     
         else:
             #With 1 dimension
             return list(set(wordlist))
+            
     else:
         return ["Nothing"]
 

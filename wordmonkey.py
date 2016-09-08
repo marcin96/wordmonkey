@@ -66,7 +66,7 @@ def doWortExtraction(args):
     if(outputfile == None):outputfile = "out.txt"
     if(printout):printOutput(words)
     if(isinstance(words[0],list)):
-        Exporter.export(words,outputfile,sep =";")
+        Exporter.export(words,outputfile,sep =" ")
     else:
         Exporter.export(words,outputfile)
     print("Took ",ressource_manager.stopTime()," s")
