@@ -41,6 +41,9 @@ def export(data,filename,sep=""):
     '''
     Exports the data into file
     '''
+    if(len(data)==0):
+        print("There is nothing to export")
+        return
     if(checkFileName(filename)==False):
         filename = changeFilename()
     count = 0

@@ -37,6 +37,7 @@ def showTermsForAccept(list_lenght,time_faktor,space_faktor):
     Shows the terms of the called funktion.
     [*]How much time this will need
     [*]How much space this will need
+    -- Prototype --
     '''
     print("Runtime: ",ressource_manager.calcTimeNeed(list_lenght,time_faktor))
     print("Space Needed: ",ressource_manager.calcSpaceNeed(list_lenght,space_faktor))
@@ -56,7 +57,7 @@ def doWortExtraction(args):
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     startindex = prefixManager.getDataFromPrefix("-stri",args)
     endword = prefixManager.getDataFromPrefix("-end",args)
-    #-
+    #- for the whole output that will be written to the file at the end.
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
     if(startindex == None):startindex = 0
@@ -113,7 +114,7 @@ def doMinimalPairs(args):
     words = Importer.import_words(inputfile)
     mpairs = []
     if(isinstance(words[0],list)):
-       mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = 1)
+        mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = 1)
     else:
         mpairs = Mpair_extractor.extractMpairs(words)
     if(printout):printOutput(mpairs)
@@ -140,6 +141,7 @@ def doCrawl(args):
     definition = prefixManager.doesPrefixExist("-deff",args)
     #---
     wikipedia = prefixManager.doesPrefixExist("-wikipedia",args)
+    startpage = prefixManager.getDataFromPrefix("-start",args)
     count = prefixManager.getDataFromPrefix("-count",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     #-
@@ -166,7 +168,8 @@ def doCrawl(args):
         WordSpyder.extractBooks(book)
     elif(wikipedia!=None):
         print("[wikipedia crawl mode]")
-        WordSpyder.missionControl("Null")
+        if(startpage ==None):startpage = "Null"
+        WordSpyder.missionControl(startpage)
         print("Files -> /dist")
         #Crawl from wikipedia //standart mode
     print("Took ",ressource_manager.stopTime()," s")
@@ -205,7 +208,6 @@ def showHelp():
     f = open("Readme.md","r")
     hep = f.read()
     print(hep)
-    print("For help please read the ReadMe.md file")
 
 def checkCanBeRun():
     '''
@@ -262,7 +264,6 @@ def main(args,console=False):
         while(True):
             main(("wordmonkey "+input(">")).split(" "),True)
     print("Log ~[log.txt]")
-
 
 if __name__== "__main__":
     #Entry Point of Wordmonkey

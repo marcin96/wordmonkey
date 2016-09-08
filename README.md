@@ -25,6 +25,7 @@ tested on: Windows
 	-spell				synthesizer mode [-i]
 	-deff				deffinition mode [-i]
 	-wikipedia			standart crawling mode of wikipedia [-]
+		-start			Starpage for crawling
 
 --prntOut				prints the changed data out
 -v					shows the version
