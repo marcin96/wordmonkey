@@ -35,13 +35,14 @@ def import_words(filename,startindex = -1,endWord = "#END",sep=" "):
         with open(filename,encoding="utf-8-sig") as file:
             for line in file:
                 if(count>startindex):
-                    line = line.lower().strip()
+                    line = line.strip()
                     if(line.lower() == endWord.lower()):break
                     if(sep in line):
                         #Also has phonetic
                         port.write("Found Phonetics")
                         #   --  Should be substring --
                         word = line[0:line.index(sep)]
+                        word = word.lower()
                         phonetic = line[line.index(sep):len(line)]
                         if("," in word):
                             wordt = word.split(",")
@@ -55,6 +56,7 @@ def import_words(filename,startindex = -1,endWord = "#END",sep=" "):
                             if(ret[0]==True):words.append([word,phonetic])
                     else:
                         #normal import
+                        line = line.lower()
                         if("," in line):
                             worte = line.split(",")
                             wt = ""
