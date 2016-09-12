@@ -25,7 +25,7 @@ def checkFileName(filename):
     Checks if the file exists and is empty or not.
     '''
     if(doesFileExist(filename)):
-        print("File ",filename," exists")
+        print("File <",filename,"> exists")
         if(isFileEmpty(filename)==False):
             print("File ", filename," is not empty")
             return False

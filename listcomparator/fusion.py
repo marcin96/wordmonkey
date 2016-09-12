@@ -26,7 +26,11 @@ def makeUnique(wordlist):
                     
         else:
             #With 1 dimension
-            return list(set(wordlist))
+            ret = []
+            for i in wordlist:
+                if(i not in ret):
+                    ret.append(i)
+            return ret
             
     else:
         return ["Nothing"]

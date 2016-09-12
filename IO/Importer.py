@@ -19,7 +19,7 @@ def filterOutCorrectFiles(directory,extens=".txt",encoding="UTF-8"):
                 files.append(name)
     return files
 
-def import_words(filename,startindex = -1,endWord = "#END",sep=" "):
+def import_words(filename,startindex = -1,endWord = "#END",sep=";"):
     '''
     Imports words from file
     First checks if file is in Order
@@ -32,7 +32,7 @@ def import_words(filename,startindex = -1,endWord = "#END",sep=" "):
     port.write(filename)
     if(report[0]):
         count = 1
-        with open(filename,encoding="utf-8-sig") as file:
+        with open(filename, "r",encoding='utf-8-sig', errors='ignore') as file:
             for line in file:
                 if(count>startindex):
                     line = line.strip()
