@@ -117,6 +117,7 @@ def doMinimalPairs(args):
     ressource_manager.startTime()
     inputfile = prefixManager.getDataFromPrefix("-i",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
+    fokusIndex = prefixManager.getDataFromPrefix("-fi",args)
     #-
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
@@ -125,7 +126,8 @@ def doMinimalPairs(args):
     mpairs = []
     logger.writeToLog("Minimalpairs "+str(gettimeMSG()),status="[Module]")
     if(isinstance(words[0],list)):
-        mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = 1)
+        if(fokusIndex==None):fokusIndex=1
+        mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = fokusIndex)
     else:
         mpairs = Mpair_extractor.extractMpairs(words)
     if(printout):printOutput(mpairs)
