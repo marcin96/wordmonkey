@@ -47,10 +47,6 @@ def fusionListsTogether(directory):
     '''
     Takes all correct files from a directory and returns a unique wordlist.
     '''
-    files = Importer.filterOutCorrectFiles(directory)
-    rootWordList = makeUnique(Importer.import_words(directory+"\\"+files[0]))
-    for i in range(1,len(files)):
-        rootWordList = fusion(rootWordList,Importer.import_words(directory+"\\"+files[i]))
-        progressbar.printProgress(i,len(files))
-    progressbar.printProgress(len(files),len(files))
-    return sorted(rootWordList)
+    words = Importer.import_directory(directory)
+    words = makeUnique(words)
+    return sorted(words)

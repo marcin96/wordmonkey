@@ -54,7 +54,7 @@ def isFileInOrder(filename):
         #do we have the persmission to read
         print("[fail] Don't have permission to read")
         return [False,"Don't have permission to read"]
-    print("[smile] Everything OK!")
+    print("\r[smile] Everything OK!")
     return [True,""]
 
 

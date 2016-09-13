@@ -3,8 +3,15 @@
 #Python 3.4
 #written for zhaw
 
+'''
+<module documentation>
+'''
+
 import os
 import sys
+import time
+import datetime
+#--------
 from utils import prefixManager
 from IO import Importer
 from IO import Exporter
@@ -14,8 +21,7 @@ from Mpair import Mpair_extractor
 from grouppier import Grouppier
 from crawler import WordSpyder
 from utils import ressource_manager
-import time
-import datetime
+from utils import logger
 
 def printOutput(out):
     '''
@@ -57,12 +63,15 @@ def doWortExtraction(args):
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     startindex = prefixManager.getDataFromPrefix("-stri",args)
     endword = prefixManager.getDataFromPrefix("-end",args)
+    extens = prefixManager.getDataFromPrefix("-ext",args)
     #- for the whole output that will be written to the file at the end.
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
     if(startindex == None):startindex = 0
+    if(extens ==None):extens = ".txt"
     if(endword==None):endword = "#END"
-    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,startindex = int(startindex),endWord = endword)))
+    logger.writeToLog("Wort Extraction "+str(gettimeMSG()),status="[Module]")
+    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,startindex = int(startindex),endWord = endword,extens=extens)))
     if(outputfile == None):outputfile = "out.txt"
     if(printout):printOutput(words)
     if(isinstance(words[0],list)):
@@ -89,6 +98,7 @@ def doListCompare(args):
     #-
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
+    logger.writeToLog("List Compare "+str(gettimeMSG()),status="[Module]")
     if(fus==True):
         wordlist = fusion.fusionListsTogether(inputdirectory)
         print("Found "+str(len(wordlist))+" unique words")
@@ -113,6 +123,7 @@ def doMinimalPairs(args):
     if(inputfile==0):print("wrong inputfile");return
     words = Importer.import_words(inputfile)
     mpairs = []
+    logger.writeToLog("Minimalpairs "+str(gettimeMSG()),status="[Module]")
     if(isinstance(words[0],list)):
         mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = 1)
     else:
@@ -147,6 +158,7 @@ def doCrawl(args):
     #-
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
+    logger.writeToLog("Crawl "+str(gettimeMSG()),status="[Module]")
     if(inputfile!=None):
         if(phonetic==True):
             print("[phonetic mode]")
@@ -189,6 +201,7 @@ def doGroupier(args):
     #-
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
+    logger.writeToLog("Groupier "+str(gettimeMSG()),status="[Module]")
     groups = Grouppier.gruppiere(Importer.import_words(inputfile))
     if(printout):printOutput(groups)
     Exporter.export(groups,outputfile,sep=":")
@@ -226,6 +239,7 @@ def main(args,console=False):
     '''
     if(console == False):print("[Wordmonkey]")
     if(checkCanBeRun()==False):exit()
+    logger.writeToLog("***Wordmonkey*** "+str(gettimeMSG()),status="[ROOT]")
     if(len(args)>1):
         if(args[1]=="-wx"):
             #Word filter
@@ -271,3 +285,5 @@ if __name__== "__main__":
         main(sys.argv)
     except KeyboardInterrupt:
             input("<Interrupted>")
+    except Exception:
+            logger.writeToLog(str(Exception))

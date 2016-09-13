@@ -9,6 +9,7 @@ from utils import progressbar
 
 def getLowest(wordA,wordB):
     '''
+    returns the lowest length of two words.
     '''
     if(len(wordA)<len(wordB)):return len(wordA)
     return len(wordB)
