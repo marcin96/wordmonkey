@@ -6,66 +6,61 @@
 import os
 import sys
 from utils import progressbar
+import difflib
 
 def getLowest(wordA,wordB):
     '''
     returns the lowest length of two words.
     '''
-    if(len(wordA)<len(wordB)):return len(wordA)
-    return len(wordB)
+    if(len(wordA)<len(wordB)):return wordA
+    return wordB
 
-def getGemeinsamkeiten(wordA,wordB):
+def getHighest(wordA,wordB):
+    if(len(wordA)>len(wordB)):return wordA
+    return wordB
+
+def getDifferenz(wordA,wordB,differenz):
     '''
     Returns the count of similarities of
     two words.
     '''
-    gemeinsam = 0
-    nicht_gemeinsam = 0
-    c = 0;
-    maxim = getLowest(wordA,wordB)
-    wordA +=" "
-    wordB +=" "
-    for i in range(0,maxim):
-        if(wordA[i] == wordB[c]):
-            gemeinsam+=1
-            i=c
-        elif(wordA[c] == wordB[i]):
-            gemeinsam+=1
-            i=c
-        elif(wordA[i+1] == wordB[i+1]):
-            if(c<maxim):
-                c+=1
-                continue
-            else:return gemeinsam+1
-        else:
-            if(c<maxim):
-                c+=1
-            else:return gemeinsam+1
-        if(c<maxim):
-            c+=1
-        else:return gemeinsam+1
-    return gemeinsam+1
+    diff = difflib.ndiff(wordA,wordB)
+    additions=0
+    subtractions = 0
+    for i,s in enumerate(diff):
+        if(s[0] =="+"):
+            additions+=1
+        elif(s[0]=="-"):
+            subtractions+=1
+    if(subtractions>0 and additions>0):
+        return abs(additions-subtractions)+differenz
+    elif(subtractions>0 and additions==0):return subtractions
+    elif(additions>0 and subtractions==0):return additions
+    else:return 0
+    
 
-def extractMpairs(wordList,is2Dim = False,index = 1):
+def extractMpairs(wordList,is2Dim = False,index = 1,differenz=1):
     '''
     Extracts Mpairs.
     '''
     if(isinstance(wordList,list)!=True): return "Wrong argument"
     if(len(wordList)<2): return "To fiew words"
     mpairs = []
-    for i in range(0,len(wordList)):
-        progressbar.printProgress(i,len(wordList))
+    count = 0
+    for i in wordList:
+        progressbar.printProgress(count,len(wordList))
+        count+=1
         wordmpair=[]
-        wordmpair.append(wordList[i])
-        for c in range(i+1,len(wordList)):
-            wort1 = wordList[i]
-            wort2 = wordList[c]
+        wordmpair.append(i)
+        for c in wordList:
+            wort1 = i
+            wort2 = c
             if(is2Dim == True):
-                wort1 = wordList[i][index]
-                wort2 = wordList[c][index]
-            if(abs((len(wort1)-len(wort2))) < 2):
-                if(getGemeinsamkeiten(wort1,wort2) > getLowest(wort1,wort2)-1):
-                    wordmpair.append(wordList[c])
+                wort1 = i[index]
+                wort2 = c[index]
+            if(abs((len(wort1)-len(wort2))) == differenz):
+                if(getDifferenz(wort1,wort2,differenz)== differenz):
+                    wordmpair.append(c)
         if(len(wordmpair)>1):
             mpairs.append(wordmpair)
     progressbar.printProgress(len(wordList),len(wordList))

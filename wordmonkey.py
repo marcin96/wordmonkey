@@ -61,17 +61,15 @@ def doWortExtraction(args):
     ressource_manager.startTime()
     inputfile = prefixManager.getDataFromPrefix("-i",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
-    startindex = prefixManager.getDataFromPrefix("-stri",args)
-    endword = prefixManager.getDataFromPrefix("-end",args)
+    start = prefixManager.getDataFromPrefix("-start",args)
+    end = prefixManager.getDataFromPrefix("-end",args)
     extens = prefixManager.getDataFromPrefix("-ext",args)
     #- for the whole output that will be written to the file at the end.
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
-    if(startindex == None):startindex = 0
     if(extens ==None):extens = ".txt"
-    if(endword==None):endword = "#END"
     logger.writeToLog("Wort Extraction "+str(gettimeMSG()),status="[Module]")
-    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,startindex = int(startindex),endWord = endword,extens=extens)))
+    words = sorted(fusion.makeUnique(Importer.import_words(inputfile,start = start,end = end,extens=extens)))
     if(outputfile == None):outputfile = "out.txt"
     if(printout):printOutput(words)
     if(isinstance(words[0],list)):
@@ -118,18 +116,20 @@ def doMinimalPairs(args):
     inputfile = prefixManager.getDataFromPrefix("-i",args)
     outputfile = prefixManager.getDataFromPrefix("-o",args)
     fokusIndex = prefixManager.getDataFromPrefix("-fi",args)
+    difference = prefixManager.getDataFromPrefix("-diff",args)
     #-
     printout = prefixManager.doesPrefixExist("--prntOut",args)
     #-
     if(inputfile==0):print("wrong inputfile");return
+    if(difference == None):difference = 1
     words = Importer.import_words(inputfile)
     mpairs = []
     logger.writeToLog("Minimalpairs "+str(gettimeMSG()),status="[Module]")
     if(isinstance(words[0],list)):
         if(fokusIndex==None):fokusIndex=1
-        mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = fokusIndex)
+        mpairs = Mpair_extractor.extractMpairs(words,is2Dim = True,index = fokusIndex,differenz=int(difference))
     else:
-        mpairs = Mpair_extractor.extractMpairs(words)
+        mpairs = Mpair_extractor.extractMpairs(words,differenz=int(difference))
     if(printout):printOutput(mpairs)
     Exporter.export(mpairs,outputfile,sep=":")
     print("Took ",ressource_manager.stopTime()," s")
@@ -283,9 +283,4 @@ def main(args,console=False):
 
 if __name__== "__main__":
     #Entry Point of Wordmonkey
-    try:
-        main(sys.argv)
-    except KeyboardInterrupt:
-            input("<Interrupted>")
-    except Exception:
-            logger.writeToLog(str(Exception))
+    main(sys.argv)

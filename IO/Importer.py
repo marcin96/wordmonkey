@@ -28,7 +28,7 @@ def filterOutCorrectFiles(directory,extens=".txt",encoding="UTF-8"):
     return files
 
 
-def import_directory(directory,startindex=-1,endWord = "#End",sep=";",extens=".txt"):
+def import_directory(directory,start=None,end=None,sep=";",extens=".txt"):
     '''
     Imports words from all files in directory
     '''
@@ -36,17 +36,35 @@ def import_directory(directory,startindex=-1,endWord = "#End",sep=";",extens=".t
     print("Found ",len(files)," files to import")
     rootWordList = import_words(directory+"\\"+files[0])
     for i in range(1,len(files)):
-        rootWordList.extend(import_words(str(directory+"\\"+files[i]),startindex,endWord,sep))
+        rootWordList.extend(import_words(str(directory+"\\"+files[i]),start,end,sep))
     return rootWordList
-    
 
-def import_words(filename,startindex = -1,endWord = "#END",sep=";",extens=".txt",ignorfstate=False):
+
+def isNumericString(wort):
+    '''
+    '''
+    return str(wort).isdigit()
+
+def trigger_erfuellt(line,count,tOb,end=False):
+    '''
+    '''
+    if(tOb==None and end==False):return True
+    if(isNumericString(tOb)):
+        if(count>int(tOb)):return True
+    else:
+        if(str(tOb).strip()==str(line).strip()):return True
+    return False
+
+def import_words(filename,start = None,end = None,sep=";",extens=".txt",ignorfstate=False):
     '''
     Imports words from file
     First checks if file is in Order
     Then it checks line for line if it
-    has the right pattern
+    has the right patter
+    start can be an index or a word
+    end can be an index or a word.
     '''
+    input(start)
     words = []
     logger.writeToLog(filename,status="[file]")
     if(ignorfstate==False):
@@ -58,11 +76,12 @@ def import_words(filename,startindex = -1,endWord = "#END",sep=";",extens=".txt"
     #if is file
     if(report[0]):
         count = 1
-        with open(filename, "r",encoding='utf-8-sig', errors='ignore') as file:
+        with open(filename, "r",encoding='utf-8', errors='ignore') as file:
             for line in file:
-                if(count>startindex):
+                if(trigger_erfuellt(line,count,start)):
+                    start = 0
                     line = line.strip()
-                    if(line.lower() == endWord.lower()):break
+                    if(trigger_erfuellt(line,count,end,end=True)):break
                     if(sep in line):
                         #Also has phonetic
                         logger.writeToLog("Found Phonetics")

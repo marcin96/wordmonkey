@@ -2,6 +2,7 @@
 #version 1.0
 #Python 3.4
 #written for zhaw
+# -*- coding: utf-8 -*-
 
 import os
 import sys
@@ -25,30 +26,6 @@ def hastherightSize(line):
     else:
         return True
 
-def isGerman(line):
-    '''
-    looks if the word has signs that are
-    allowed in the german language.
-    '''
-    in_german = "äöüß-".join(string.ascii_lowercase)
-    for i in line:
-        if(i not in in_german):return False
-    return True
-
-def onlyVokal(line):
-    '''
-    Looks if the line has only vokals
-    '''
-    match = re.match("^[AEOIUÄÖÜY-]*$",line)
-    return match is not None
-
-def onlyKonsonant(line):
-    '''
-    Looks if the line has only konsonants
-    '''
-    match = re.match("^[BCDGKLMNPQRSTVWXZJH-]*$",line)
-    return match is not None
-
 def isGermanWord(line,acceptedSPchars=""):
     '''
     checks if the line is a word
@@ -62,14 +39,6 @@ def isGermanWord(line,acceptedSPchars=""):
         return [False,"Word has forbidden chars"]
     if(hastherightSize(line)!=True):
         return [False,"Word is to big or to small"]
-    if(isGerman(line)!=True):
-        return [False,"It contians forbidden chars in german"]
-    if(onlyVokal(line)==True):
-        return [False,"Only Vokals"]
-        None
-    if(onlyKonsonant(line)==True):
-        return [False,"Only Konsonants"]
-        None
     return [True,""]
     
 if __name__ == "__main__":

@@ -57,20 +57,6 @@ def getDifferenceOfWords(word_one,word_two):
             diff.append([charIndex,word_one[charIndex],word_two[charIndex]])
     return diff
     
-def isallowedDifference(diff):
-    '''
-    Checks if the difference between rootwords
-    is allowed in german.
-    '''
-    allowedPos = [2,5] #Min - Max
-    allowed = "a:ä,o:ö,u:ü,i:ie,i:e"
-    allowed = allowed.split(",")
-    for i in allowed:
-        i = i.split(":")
-    for d in diff:
-        None
-        
-    
 def isTheSame(wordlistOne,wordlistTwo):
     '''
     '''
